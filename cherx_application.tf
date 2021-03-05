@@ -5,6 +5,10 @@ variable "lambda_function_name" {
 
 resource "aws_lambda_function" "cherx_dev" {
    function_name = var.lambda_function_name
+   tags = {
+    Environment = "development"
+   }
+
 
    s3_bucket = aws_s3_bucket.files.bucket
    s3_key    = "source/dev_1.zip"
@@ -77,6 +81,36 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
   role       = aws_iam_role.lambda_exec_dev.name
   policy_arn = aws_iam_policy.lambda_logging.arn
 }
+
+resource "aws_iam_policy" "matching_queue_send_and_receive" {
+  name        = "matching_queue_send_and_receive"
+  path        = "/"
+  description = "IAM policy to enable sending and receiving messages for the matching queue"
+  
+  policy = format(<<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage"
+      ],
+      "Resource": "${aws_sqs_queue.matching_queue.arn}",
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+)
+}
+
+resource "aws_iam_role_policy_attachment" "matching_queue_send_and_receive" {
+  role       = aws_iam_role.lambda_exec_dev.name
+  policy_arn = aws_iam_policy.matching_queue_send_and_receive.arn
+}
+
+
 
 
 resource "aws_lambda_permission" "apigw" {
