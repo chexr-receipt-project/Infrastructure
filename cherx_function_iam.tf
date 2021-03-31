@@ -56,7 +56,9 @@ resource "aws_iam_policy" "matching_queue_send_and_receive" {
     {
       "Action": [
         "sqs:SendMessage",
-        "sqs:ReceiveMessage"
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes"
       ],
       "Resource": "${aws_sqs_queue.matching_queue.arn}",
       "Effect": "Allow"

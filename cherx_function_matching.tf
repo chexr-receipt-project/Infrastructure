@@ -23,3 +23,9 @@ resource "aws_lambda_function" "cherx_dev_matching" {
   ]
 
 }
+
+
+resource "aws_lambda_event_source_mapping" "event_source_mapping" {
+  event_source_arn = aws_sqs_queue.matching_queue.arn
+  function_name    = aws_lambda_function.cherx_dev_matching.arn
+}
