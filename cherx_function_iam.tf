@@ -19,6 +19,33 @@ EOF
 
 }
 
+# See also the following AWS managed policy: AWSLambdaBasicExecutionRole
+resource "aws_iam_policy" "lambda_vpc" {
+  name        = "lambda_vpc"
+  path        = "/"
+  description = "IAM policy for attach lambda to a VPC"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:CreateNetworkInterface",
+        "ec2:DeleteNetworkInterface",
+        "ec2:DescribeInstances",
+        "ec2:AttachNetworkInterface"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+
 
 # See also the following AWS managed policy: AWSLambdaBasicExecutionRole
 resource "aws_iam_policy" "lambda_logging" {
@@ -87,4 +114,9 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
 resource "aws_iam_role_policy_attachment" "matching_queue_send_and_receive" {
   role       = aws_iam_role.lambda_exec_dev.name
   policy_arn = aws_iam_policy.matching_queue_send_and_receive.arn
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_vpc" {
+  role       = aws_iam_role.lambda_exec_dev.name
+  policy_arn = aws_iam_policy.lambda_vpc.arn
 }
