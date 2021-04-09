@@ -30,7 +30,7 @@ resource "aws_lambda_function" "lambda_function_send_receipt" {
 
   environment {
     variables = {
-      MONGO_URL = "mongodb://${aws_docdb_cluster.service.master_username}:${aws_docdb_cluster.service.master_password}@${aws_docdb_cluster.service.endpoint}:${aws_docdb_cluster.service.port}"
+      MONGO_URL = "mongodb://${aws_docdb_cluster.service.master_username}:${aws_docdb_cluster.service.master_password}@${aws_docdb_cluster.service.endpoint}:${aws_docdb_cluster.service.port}/?retryWrites=false"
       PROJECT_NAME = var.name
       MONGO_DATABASE = var.mongo_db_name
       MATCHING_QUEUE_URL = aws_sqs_queue.matching_queue.id
