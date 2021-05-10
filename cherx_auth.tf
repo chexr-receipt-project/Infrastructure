@@ -1,6 +1,6 @@
-resource "aws_cognito_user_pool" "test_chexr" {
+resource "aws_cognito_user_pool" "chexr_users" {
   # This is choosen when creating a user pool in the console
-  name = "test_chexr_user_pool"
+  name = "chexr_users"
 
    account_recovery_setting {
     recovery_mechanism {
@@ -49,8 +49,29 @@ resource "aws_cognito_user_pool" "test_chexr" {
 }
 
 # DOMAIN NAME
-resource "aws_cognito_user_pool_domain" "test_chexr" {
-  user_pool_id = aws_cognito_user_pool.test_chexr.id
+resource "aws_cognito_user_pool_domain" "chexr_user" {
+  user_pool_id = aws_cognito_user_pool.chexr_users.id
   # DOMAIN PREFIX
-  domain = "chexrtestusers"
+  domain = "chexrusers"
+}
+
+resource "aws_cognito_resource_server" "resource" {
+  identifier = "receipts"
+  name       = "Receipts Service"
+
+  scope {
+    scope_name        = "bank"
+    scope_description = "access to banking resources"
+  }
+
+  scope {
+    scope_name        = "merchant"
+    scope_description = "access to merchant resources"
+  }
+  scope {
+    scope_name        = "admin"
+    scope_description = "access to admin resources"
+  }
+
+  user_pool_id = aws_cognito_user_pool.chexr_users.id
 }
