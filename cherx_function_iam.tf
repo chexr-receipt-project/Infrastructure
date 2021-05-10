@@ -1,5 +1,5 @@
-resource "aws_iam_role" "lambda_exec_dev" {
-   name = "cherx_dev"
+resource "aws_iam_role" "lambda_exec" {
+   name = "cherx_lambda"
 
    assume_role_policy = <<EOF
 {
@@ -106,17 +106,17 @@ resource "aws_cloudwatch_log_group" "lambda_logs" {
 
 
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
-  role       = aws_iam_role.lambda_exec_dev.name
+  role       = aws_iam_role.lambda_exec.name
   policy_arn = aws_iam_policy.lambda_logging.arn
 }
 
 
 resource "aws_iam_role_policy_attachment" "matching_queue_send_and_receive" {
-  role       = aws_iam_role.lambda_exec_dev.name
+  role       = aws_iam_role.lambda_exec.name
   policy_arn = aws_iam_policy.matching_queue_send_and_receive.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_vpc" {
-  role       = aws_iam_role.lambda_exec_dev.name
+  role       = aws_iam_role.lambda_exec.name
   policy_arn = aws_iam_policy.lambda_vpc.arn
 }
