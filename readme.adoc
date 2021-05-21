@@ -4,6 +4,21 @@ The infrastructure deployment and mantainence is fully automated using link:http
 
 Some manual steps are needed. Mostly they are related more to presentation than functionality.
 
+== Using Terraform
+
+1. Follow this link:https://learn.hashicorp.com/tutorials/terraform/install-cli[tutorial] to install terraform on your operational system.
+1. Install and Configure your AWS Account following this link:https://learn.hashicorp.com/tutorials/terraform/aws-build[tutorial].
+1. Review the variables set in file `vars.tf`
+1. Run the command bellow to install all dependencies (just need in the first time)
+
++
+   \> terraform init
+
+1. Now deploy or update the infrastructure. Terraform will evaluate what services already exists, what's missing and what needs to be updated. You can review and type `yes` to authorize the changes.
+
++
+   \> terraform apply
+
 == Cognito Custom Domain
 
 1. Create (and validate) certificate for the custom domain link:https://us-east-1.console.aws.amazon.com/acm/home[here];
